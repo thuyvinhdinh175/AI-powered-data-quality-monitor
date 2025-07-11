@@ -1,0 +1,68 @@
+{
+  "llm": {
+    "provider": "openai",
+    "model": "gpt-3.5-turbo-0613",
+    "api_key": "${OPENAI_API_KEY}",
+    "temperature": 0.2,
+    "max_tokens": 1000
+  },
+  "alerts": {
+    "email": {
+      "enabled": false,
+      "smtp_server": "smtp.gmail.com",
+      "smtp_port": 587,
+      "sender_email": "your-email@example.com",
+      "sender_password": "${EMAIL_PASSWORD}",
+      "recipients": ["team@example.com"]
+    },
+    "slack": {
+      "enabled": true,
+      "webhook_url": "${SLACK_WEBHOOK_URL}",
+      "channel": "#data-quality"
+    },
+    "webhook": {
+      "enabled": false,
+      "url": "https://your-webhook-url.com/endpoint",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer ${WEBHOOK_TOKEN}"
+      }
+    }
+  },
+  "api": {
+    "url": "https://api.example.com/data",
+    "method": "GET",
+    "headers": {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${API_TOKEN}"
+    },
+    "params": {
+      "limit": 1000,
+      "from_date": "${YESTERDAY}",
+      "to_date": "${TODAY}"
+    }
+  },
+  "database": {
+    "type": "postgresql",
+    "host": "db.example.com",
+    "port": 5432,
+    "database": "analytics",
+    "username": "${DB_USERNAME}",
+    "password": "${DB_PASSWORD}",
+    "query": "SELECT * FROM transactions WHERE created_at >= '${YESTERDAY}' AND created_at < '${TODAY}'"
+  },
+  "validation": {
+    "default_suite": "transactions_suite",
+    "thresholds": {
+      "missing_values": 1.0,
+      "schema_drift": 0.0,
+      "data_type_mismatch": 0.5,
+      "duplicate_rows": 0.0
+    }
+  },
+  "memory": {
+    "enabled": true,
+    "storage_path": "data/memory",
+    "retention_days": 30
+  }
+}

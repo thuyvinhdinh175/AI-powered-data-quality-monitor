@@ -1,0 +1,97 @@
+name: transactions_suite
+config_version: 1.0
+expectations:
+  - expectation_type: expect_table_columns_to_match_ordered_list
+    kwargs:
+      column_list:
+        - transaction_id
+        - customer_id
+        - transaction_date
+        - amount
+        - category
+        - status
+        - location
+      exact_match: true
+  
+  - expectation_type: expect_table_row_count_to_be_between
+    kwargs:
+      min_value: 1
+      max_value: 1000000
+  
+  - expectation_type: expect_column_values_to_not_be_null
+    kwargs:
+      column: transaction_id
+  
+  - expectation_type: expect_column_values_to_be_unique
+    kwargs:
+      column: transaction_id
+  
+  - expectation_type: expect_column_values_to_not_be_null
+    kwargs:
+      column: customer_id
+      mostly: 0.99
+  
+  - expectation_type: expect_column_values_to_be_of_type
+    kwargs:
+      column: transaction_date
+      type_: datetime
+      mostly: 0.95
+  
+  - expectation_type: expect_column_values_to_not_be_null
+    kwargs:
+      column: transaction_date
+      mostly: 0.98
+  
+  - expectation_type: expect_column_values_to_be_between
+    kwargs:
+      column: amount
+      min_value: 0
+      max_value: 10000
+      mostly: 0.99
+  
+  - expectation_type: expect_column_values_to_be_of_type
+    kwargs:
+      column: amount
+      type_: number
+      mostly: 0.99
+  
+  - expectation_type: expect_column_values_to_not_be_null
+    kwargs:
+      column: amount
+      mostly: 0.99
+  
+  - expectation_type: expect_column_values_to_be_in_set
+    kwargs:
+      column: status
+      value_set:
+        - Completed
+        - Pending
+        - Refunded
+        - Cancelled
+  
+  - expectation_type: expect_column_values_to_not_be_null
+    kwargs:
+      column: location
+      mostly: 0.99
+
+meta:
+  notes:
+    format: markdown
+    content: |
+      # Transactions Data Quality Suite
+      
+      This expectation suite validates daily transaction data to ensure its quality and integrity.
+      
+      ## Key validation rules:
+      
+      - All transactions must have a unique transaction_id
+      - Customer_id should be present in 99% of cases
+      - Transaction amounts should be positive and numeric
+      - Transaction status must be one of: Completed, Pending, Refunded, or Cancelled
+      - Dates should be in a valid date format
+      
+      ## LLM Enhancements:
+      
+      - Automatically suggests threshold adjustments based on data patterns
+      - Provides explanations for validation failures
+      - Recommends fixes for common data quality issues

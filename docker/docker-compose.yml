@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  dashboard:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8501:8501"
+    volumes:
+      - ../:/app
+    environment:
+      - PYTHONPATH=/app
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    command: ["streamlit", "run", "app/dashboard.py", "--server.port=8501", "--server.address=0.0.0.0"]
+    depends_on:
+      - airflow
+
+  airflow:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.airflow
+    ports:
+      - "8080:8080"
+    volumes:
+      - ../:/app
+      - ../dags:/opt/airflow/dags
+      - airflow-logs:/opt/airflow/logs
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=sqlite:////opt/airflow/airflow.db
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+      - AIRFLOW__WEBSERVER__EXPOSE_CONFIG=True
+      - AIRFLOW__WEBSERVER__DAG_DEFAULT_VIEW=graph
+      - AIRFLOW__WEBSERVER__DAG_ORIENTATION=TB
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    command: ["airflow", "standalone"]
+
+volumes:
+  airflow-logs:

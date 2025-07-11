@@ -1,0 +1,21 @@
+transaction_id,customer_id,transaction_date,amount,category,status,location
+1001,C5432,2025-07-01,125.99,Electronics,Completed,New York
+1002,C1234,2025-07-01,45.50,Groceries,Completed,San Francisco
+1003,C7890,2025-07-01,800.00,Furniture,Pending,Chicago
+1004,C3456,2025-07-02,65.25,Dining,Completed,Boston
+1005,C5432,2025-07-02,12.99,Books,Completed,New York
+1006,C1234,2025-07-02,200.00,Clothing,Refunded,San Francisco
+1007,C7890,2025-07-03,null,Electronics,Completed,Chicago
+1008,C3456,2025-07-03,89.99,Entertainment,Completed,Boston
+1009,C5432,2025-07-04,55.00,Transportation,Completed,New York
+1010,C1234,2025-07-04,150.25,Groceries,Pending,San Francisco
+1011,C9999,,35.40,Books,Completed,Seattle
+1012,C8765,2025-07-05,abc,Electronics,Completed,Denver
+1013,C1234,2025-07-05,450.00,Travel,Completed,San Francisco
+1014,C3456,2025-07-06,25.75,Dining,Completed,Boston
+1015,C5432,2025-07-06,-50.00,Refund,Completed,New York
+1016,C7890,2025-07-06,300.00,Electronics,Cancelled,Chicago
+1017,,2025-07-07,75.50,Groceries,Completed,Dallas
+1018,C3456,2025-07-07,110.00,Clothing,Pending,Boston
+1019,C5432,2025-07-08,20.00,Books,Completed,New York
+1020,C1234,2025-07-08,175.99,Furniture,Completed,San Francisco
