@@ -4,26 +4,91 @@ An intelligent data quality system that continuously monitors datasets for anoma
 
 ## 🏗️ System Architecture
 
-```
-┌────────────┐
-│ Data Ingestion (CSV, API, etc.) │
-└────┬───────┘
-     ↓
-┌──────────────────┐
-│ Validator Layer │ <──── (Great Expectations + Custom Checks)
-└────┬───────┬─────┘
-     ↓       ↓
-┌────────────────┐  ┌────────────────────┐
-│ Rule-based DQ │  │ LLM-based Insight │ <──── (LangChain + DeepSeek/LLM)
-└────┬────────────┘  └────────────┬──────┘
-     ↓                            ↓
-┌────────────┐     ┌────────────────────┐
-│ Alerts     │     │ Suggest Fixes / Logs│
-└────────────┘     └────────────────────┘
-     ↓
-┌───────────────────────────┐
-│ Streamlit / Superset Dash │
-└───────────────────────────┘
+```mermaid
+flowchart TB
+    subgraph Data_Sources["Data Sources"]
+        CSV["CSV Files"]
+        API["API Data"]
+        DB["Databases"]
+    end
+
+    subgraph Data_Ingestion["Data Ingestion"]
+        Ingest["app/data_ingestion/ingest.py"]
+    end
+
+    subgraph Validation_Layer["Validation Layer"]
+        GE["Great Expectations"]
+        Custom["Custom Checks"]
+        Validator["app/validator/run_checks.py"]
+    end
+
+    subgraph LLM_Engine["LLM Intelligence Engine"]
+        ExpGen["llm_agent/expectation_generator.py"]
+        InsightGen["llm_agent/insight_generator.py"]
+        FixGen["llm_agent/fix_suggestor.py"]
+    end
+
+    subgraph Storage["Storage"]
+        Raw["data/raw"]
+        Results["data/validation_results"]
+        Insights["data/insights"]
+        Fixes["data/fixes"]
+        Memory["data/memory"]
+    end
+
+    subgraph Alerts["Alerting System"]
+        AlertMgr["app/alert_manager.py"]
+        Email["Email Notifications"]
+        Slack["Slack Alerts"]
+    end
+
+    subgraph Visualization["Visualization"]
+        Dashboard["app/dashboard.py (Streamlit)"]
+        Reports["Summary Reports"]
+    end
+
+    subgraph Orchestration["Orchestration"]
+        Airflow["dags/data_quality_dag.py"]
+    end
+
+    %% Connections between components
+    Data_Sources --> Data_Ingestion
+    Data_Ingestion --> Raw
+    Raw --> Validation_Layer
+    Validation_Layer --> Results
+    Results --> LLM_Engine
+    LLM_Engine --> Insights
+    LLM_Engine --> Fixes
+    LLM_Engine --> Memory
+    Results --> Alerts
+    Insights --> Alerts
+    Fixes --> Alerts
+    Results --> Visualization
+    Insights --> Visualization
+    Fixes --> Visualization
+    Airflow --> Data_Ingestion
+    Airflow --> Validation_Layer
+    Airflow --> LLM_Engine
+    Airflow --> Alerts
+
+    %% Styles
+    classDef sourceStyle fill:#f5f5f5,stroke:#333,stroke-width:1px;
+    classDef ingestStyle fill:#d4f1f9,stroke:#333,stroke-width:1px;
+    classDef validationStyle fill:#ffe6cc,stroke:#333,stroke-width:1px;
+    classDef llmStyle fill:#e1d5e7,stroke:#333,stroke-width:1px;
+    classDef storageStyle fill:#d5e8d4,stroke:#333,stroke-width:1px;
+    classDef alertStyle fill:#fff2cc,stroke:#333,stroke-width:1px;
+    classDef vizStyle fill:#dae8fc,stroke:#333,stroke-width:1px;
+    classDef orchestrationStyle fill:#f8cecc,stroke:#333,stroke-width:1px;
+
+    class Data_Sources,CSV,API,DB sourceStyle;
+    class Data_Ingestion,Ingest ingestStyle;
+    class Validation_Layer,GE,Custom,Validator validationStyle;
+    class LLM_Engine,ExpGen,InsightGen,FixGen llmStyle;
+    class Storage,Raw,Results,Insights,Fixes,Memory storageStyle;
+    class Alerts,AlertMgr,Email,Slack alertStyle;
+    class Visualization,Dashboard,Reports vizStyle;
+    class Orchestration,Airflow orchestrationStyle;
 ```
 
 ## 🛠️ Core Stack
