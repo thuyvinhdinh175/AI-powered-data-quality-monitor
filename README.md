@@ -6,22 +6,38 @@ An intelligent data quality system that continuously monitors datasets for anoma
 
 ```mermaid
 flowchart TB
-    DataIngestion["Data Ingestion (CSV, API, etc.)"] --> ValidatorLayer
-    ValidatorLayer["Validator Layer"] --> RuleDQ
+    %% Subgraph: Data Ingestion
+    subgraph Ingestion["Data Ingestion"]
+        DataIngestion["Data Ingestion (CSV, API, etc.)"]
+    end
+
+    %% Subgraph: Validation Layer
+    subgraph Validation["Validator Layer"]
+        ValidatorLayer["Validator Layer"]
+        RuleDQ["Rule-based DQ"]
+        ValidatorLayer --> RuleDQ
+    end
+    DataIngestion --> ValidatorLayer
+
+    %% Subgraph: LLM Insight
+    subgraph LLM["LLM-based Insight"]
+        LLMInsight["LLM-based Insight"]
+        SuggestFixes["Suggest Fixes / Logs"]
+        LLMInsight --> SuggestFixes
+    end
     ValidatorLayer --> LLMInsight
-    
-    %% Add annotation for Validator Layer
+
+    %% Subgraph: Output / Dashboard
+    subgraph Output["Output & Dashboard"]
+        Alerts["Alerts"]
+        Dashboard["Streamlit / Superset Dash"]
+        RuleDQ --> Alerts
+        Alerts --> Dashboard
+    end
+
+    %% Annotations (non-styled notes)
     ValidatorNote["(Great Expectations + Custom Checks)"] -.-> ValidatorLayer
-    
-    RuleDQ["Rule-based DQ"] --> Alerts
-    LLMInsight["LLM-based Insight"] --> SuggestFixes
-    
-    %% Add annotation for LLM Insight
     LLMNote["(LangChain + DeepSeek/LLM)"] -.-> LLMInsight
-    
-    Alerts["Alerts"] --> Dashboard
-    SuggestFixes["Suggest Fixes / Logs"] 
-    Dashboard["Streamlit / Superset Dash"]
 ```
 
 ## 🛠️ Core Stack
