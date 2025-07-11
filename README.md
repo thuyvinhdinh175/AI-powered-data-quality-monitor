@@ -4,36 +4,26 @@ An intelligent data quality system that continuously monitors datasets for anoma
 
 ## 🏗️ System Architecture
 
-```mermaid
-flowchart TB
-    %% Subgraph: Data Ingestion
-    subgraph Ingestion["Data Ingestion"]
-        DataIngestion["Data Ingestion (CSV, API, etc.)"]
-    end
-
-    %% Subgraph: Validator Layer
-    subgraph Validation["Validator Layer"]
-        ValidatorLayer["Validator Layer (Great Expectations + Custom Checks)"]
-        RuleDQ["Rule-based DQ"]
-        ValidatorLayer --> RuleDQ
-    end
-    DataIngestion --> ValidatorLayer
-
-    %% Subgraph: LLM Insight
-    subgraph LLM["LLM-based Insight"]
-        LLMInsight["LLM-based Insight (LangChain + DeepSeek/LLM)"]
-        SuggestFixes["Suggest Fixes / Logs"]
-        LLMInsight --> SuggestFixes
-    end
-    ValidatorLayer --> LLMInsight
-
-    %% Subgraph: Output / Dashboard
-    subgraph Output["Output & Dashboard"]
-        Alerts["Alerts"]
-        Dashboard["Streamlit / Superset Dash"]
-        RuleDQ --> Alerts
-        Alerts --> Dashboard
-    end
+```
+┌────────────┐
+│ Data Ingestion (CSV, API, etc.) │
+└────┬───────┘
+     ↓
+┌──────────────────┐
+│ Validator Layer │ <──── (Great Expectations + Custom Checks)
+└────┬───────┬─────┘
+     ↓       ↓
+┌────────────────┐  ┌────────────────────┐
+│ Rule-based DQ │  │ LLM-based Insight │ <──── (LangChain + DeepSeek/LLM)
+└────┬────────────┘  └────────────┬──────┘
+     ↓                            ↓
+┌────────────┐     ┌────────────────────┐
+│ Alerts     │     │ Suggest Fixes / Logs│
+└────────────┘     └────────────────────┘
+     ↓
+┌───────────────────────────┐
+│ Streamlit / Superset Dash │
+└───────────────────────────┘
 ```
 
 ## 🛠️ Core Stack
