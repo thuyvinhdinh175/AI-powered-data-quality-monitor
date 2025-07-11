@@ -11,9 +11,9 @@ flowchart TB
         DataIngestion["Data Ingestion (CSV, API, etc.)"]
     end
 
-    %% Subgraph: Validation Layer
+    %% Subgraph: Validator Layer
     subgraph Validation["Validator Layer"]
-        ValidatorLayer["Validator Layer"]
+        ValidatorLayer["Validator Layer\n(Great Expectations + Custom Checks)"]
         RuleDQ["Rule-based DQ"]
         ValidatorLayer --> RuleDQ
     end
@@ -21,7 +21,7 @@ flowchart TB
 
     %% Subgraph: LLM Insight
     subgraph LLM["LLM-based Insight"]
-        LLMInsight["LLM-based Insight"]
+        LLMInsight["LLM-based Insight\n(LangChain + DeepSeek/LLM)"]
         SuggestFixes["Suggest Fixes / Logs"]
         LLMInsight --> SuggestFixes
     end
@@ -34,10 +34,6 @@ flowchart TB
         RuleDQ --> Alerts
         Alerts --> Dashboard
     end
-
-    %% Annotations (non-styled notes)
-    ValidatorNote["(Great Expectations + Custom Checks)"] -.-> ValidatorLayer
-    LLMNote["(LangChain + DeepSeek/LLM)"] -.-> LLMInsight
 ```
 
 ## 🛠️ Core Stack
